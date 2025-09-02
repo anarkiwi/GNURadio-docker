@@ -1,0 +1,49 @@
+name: buildx
+
+on:
+  push:
+    branches: main
+    tags: 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment:
+      name: "release"
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        fetch-depth: 0
+    - name: Get the version
+      id: get_version
+      run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+    - name: Change for main
+      id: change_version
+      run: if [ "${{ steps.get_version.outputs.VERSION }}" == "main" ]; then echo ::set-output name=VERSION::latest; else echo ::set-output name=VERSION::${{ steps.get_version.outputs.VERSION }}; fi
+    - name: Set up Docker Buildx
+      id: buildx
+      uses: docker/setup-buildx-action@v3
+    - name: Docker Login
+      run: |
+        docker login --username ${{ secrets.DOCKER_USERNAME }} --password ${{ secrets.DOCKER_PASSWORD }}
+      if: github.repository == 'anarkiwi/gnuradio' && github.event_name == 'push'
+    - name: Build and push dependencies
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: Dockerfile.dependencies
+        platforms: linux/amd64
+        push: true
+        tags: anarkiwi/gnuradio-dependencies:latest
+      if: github.repository == 'anarkiwi/gnuradio' && github.event_name == 'push'
+    - name: Build and push dependencies
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: Dockerfile
+        platforms: linux/amd64
+        push: true
+        build-args: |
+          GNURADIO_TAG=${{ steps.change_version.outputs.VERSION }}
+        tags: anarkiwi/gnuradio:${{ steps.change_version.outputs.VERSION }}
+      if: github.repository == 'anarkiwi/gnuradio' && github.event_name == 'push'
