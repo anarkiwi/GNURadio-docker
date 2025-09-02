@@ -8,4 +8,4 @@ jobs:
     - name: docker build
       run: |
         docker build -f Dockerfile.dependencies . -t anarkiwi/gnuradio-dependencies:latest
-        docker build --build-arg GNURADIO_TAG=latest -t anarkiwi/gnuradio:latest -f Dockerfile .
+        docker build --build-arg GNURADIO_TAG=main -t anarkiwi/gnuradio:latest -f Dockerfile .
