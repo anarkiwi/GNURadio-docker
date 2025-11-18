@@ -43,6 +43,7 @@ jobs:
         file: Dockerfile.dependencies
         platforms: ${{ matrix.platform }}
         push: false
+        load: true
         tags: anarkiwi/gnuradio-dependencies:latest
       if: github.repository == 'anarkiwi/GNURadio-docker' && github.event_name == 'push'
     - name: Build and push dependencies
