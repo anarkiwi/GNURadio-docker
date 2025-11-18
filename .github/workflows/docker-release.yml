@@ -54,7 +54,7 @@ jobs:
         push: true
         build-args: |
           DEPENDENCIES_VERSION=${{ steps.change_version.outputs.VERSION }}-${{ matrix.platform }}
-          GNURADIO_TAG=${{ steps.change_version.outputs.VERSION }}-${{ matrix.platform }}
+          GNURADIO_TAG=${{ steps.change_version.outputs.VERSION }}
         tags: anarkiwi/gnuradio:${{ steps.change_version.outputs.VERSION }}-${{ matrix.platform }}
       if: github.repository == 'anarkiwi/GNURadio-docker' && github.event_name == 'push'
   release-manifest:
