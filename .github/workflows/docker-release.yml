@@ -7,6 +7,9 @@ on:
 
 jobs:
   release:
+    strategy:
+      matrix:
+        platform: ["linux/amd64", "linux/arm64"]
     runs-on: ubuntu-latest
     environment:
       name: "release"
@@ -38,7 +41,7 @@ jobs:
       with:
         context: .
         file: Dockerfile.dependencies
-        platforms: linux/amd64,linux/arm64
+        platforms: {{ matrix.platform }}
         push: true
         tags: anarkiwi/gnuradio-dependencies:latest
       if: github.repository == 'anarkiwi/GNURadio-docker' && github.event_name == 'push'
@@ -47,7 +50,7 @@ jobs:
       with:
         context: .
         file: Dockerfile
-        platforms: linux/amd64,linux/arm64
+        platforms: {{ matrix.platform }}
         push: true
         build-args: |
           GNURADIO_TAG=${{ steps.change_version.outputs.VERSION }}
