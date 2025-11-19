@@ -13,7 +13,7 @@ jobs:
         builder: ["ubuntu-latest", "ubuntu-arm64-2404"]
         exclude:
           - platform: "amd64"
-            builder: "ubuntu-arm64-latest"
+            builder: "ubuntu-arm64-2404"
           - platform: "arm64"
             builder: "ubuntu-latest"
     runs-on: ${{ matrix.builder }}
