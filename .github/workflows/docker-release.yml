@@ -87,9 +87,5 @@ jobs:
       if: github.repository == 'anarkiwi/GNURadio-docker' && github.event_name == 'push'
     - name: Create SHA manifest and push
       run: |
-        docker manifest create \
-          anarkiwi/gnuradio:${{ steps.change_version.outputs.VERSION }} \
-          --amend anarkiwi/gnuradio:${{ steps.change_version.outputs.VERSION }}-amd64 \
-          --amend anarkiwi/gnuradio:${{ steps.change_version.outputs.VERSION }}-arm64
-        docker manifest push anarkiwi/gnuradio:${{ steps.change_version.outputs.VERSION }}
+        docker buildx imagetools create -t anarkiwi/gnuradio:${{ steps.change_version.outputs.VERSION }} anarkiwi/gnuradio:${{ steps.change_version.outputs.VERSION }}-arm64 anarkiwi/gnuradio:${{ steps.change_version.outputs.VERSION }}
       if: github.repository == 'anarkiwi/GNURadio-docker' && github.event_name == 'push'
