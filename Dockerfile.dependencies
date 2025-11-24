@@ -1,5 +1,5 @@
 FROM ubuntu:24.04
-ARG MARCH=native
+ARG MARCH=-mnative
 RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common && \
     apt-get -y --no-install-recommends install \
     build-essential \
@@ -50,6 +50,6 @@ RUN git clone --depth 1 https://github.com/gnuradio/volk -b v3.1.2
 RUN git clone --depth 1 https://github.com/pothosware/SoapySDR -b soapy-sdr-0.8.1
 WORKDIR /root/volk/build
 RUN git submodule update --init
-RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -march=${MARCH}" .. && make -j "$(nproc)" && make install
+RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} ${MARCH}" .. && make -j "$(nproc)" && make install
 WORKDIR /root/SoapySDR/build
-RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} -march=${MARCH}" .. && make -j "$(nproc)" && make install
+RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} ${MARCH}" .. && make -j "$(nproc)" && make install

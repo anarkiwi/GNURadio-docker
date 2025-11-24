@@ -32,10 +32,10 @@ jobs:
       run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
     - name: Change for main
       id: change_version
-      run: if [ "${{ steps.get_version.outputs.VERSION }}" == "main" ]; then echo ::set-output name=VERSION::latest; else echo ::set-output name=VERSION::${{ steps.get_version.outputs.VERSION }}; fi
+      run: if [ "${{ steps.get_version.outputs.VERSION }}" == "main" ]; then echo VERSION=latest >> $GITHUB_OUTPUT; else echo VERSION=${{ steps.get_version.outputs.VERSION }} >> $GITHUB_OUTPUT; fi
     - name: Change for platform
       id: change_platform
-      run: if [ "${{ matrix.platform }}" == "arm64" ]; then echo ::set-output name=MARCH::armv8.2-a; else echo ::set-output name=MARCH::native; fi
+      run: if [ "${{ matrix.platform }}" == "arm64" ]; then echo MARCH=-march=armv8.2-a -mtune=cortex-a78 >> $GITHUB_OUTPUT; else echo MARCH=-march=native >> $GITHUB_OUTPUT ; fi
     - name: Set up Docker Buildx
       id: buildx
       uses: docker/setup-buildx-action@v3
