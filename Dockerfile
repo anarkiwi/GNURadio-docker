@@ -1,7 +1,7 @@
 ARG DEPENDENCIES_VERSION="latest"
 FROM anarkiwi/gnuradio-dependencies:${DEPENDENCIES_VERSION} AS gr-builder
 
-ARG MARCH=-mnative
+ARG MARCH=-march=native
 ARG GNURADIO_TAG
 
 WORKDIR /root
