@@ -1,5 +1,5 @@
 FROM ubuntu:24.04
-ARG MARCH=-mnative
+ARG MARCH=-march=native
 RUN apt-get update && apt-get install -y --no-install-recommends software-properties-common && \
     apt-get -y --no-install-recommends install \
     build-essential \
@@ -11,6 +11,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
     libarmadillo-dev \
     libbladerf-dev \
     libboost-all-dev \
+    libc++-dev \
     libev-dev \
     libfftw3-dev \
     libgmp-dev \
@@ -21,7 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends software-proper
     libspdlog-dev \
     libthrift-dev \
     libuhd-dev \
-    libunwind-dev \
+    libunwind-18-dev \
     libusb-1.0-0-dev \
     libusb-1.0-0 \
     libvulkan-dev \
