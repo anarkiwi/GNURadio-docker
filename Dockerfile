@@ -16,4 +16,4 @@ COPY --from=gr-builder /usr/local /usr/local
 FROM anarkiwi/gnuradio-dependencies:${DEPENDENCIES_VERSION}
 COPY --from=driver-builder /usr/local /usr/local
 RUN ldconfig -v
-RUN python3 -c "from gnuradio import analog, blocks, gr, network, soapy, zeromq"
+RUN python3 -c "from gnuradio import analog, blocks, gr, network, soapy, uhd, zeromq"
