@@ -13,20 +13,6 @@ RUN CMAKE_CXX_STANDARD=17 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${
 FROM anarkiwi/gnuradio-dependencies:${DEPENDENCIES_VERSION} AS driver-builder
 COPY --from=gr-builder /usr/local /usr/local
 
-WORKDIR /root
-RUN git clone --depth 1 https://github.com/pothosware/SoapyBladeRF -b soapy-bladerf-0.4.1
-RUN git clone --depth 1 https://github.com/pothosware/SoapyUHD -b soapy-uhd-0.4.1
-RUN git clone --depth 1 https://github.com/Nuand/bladeRF.git -b 2023.02
-RUN git clone --depth 1 https://github.com/anarkiwi/lime-tools -b samples
-WORKDIR /root/SoapyBladeRF/build
-RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} ${MARCH}" .. && make -j "$(nproc)" && make install
-WORKDIR /root/SoapyUHD/build
-RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} ${MARCH}" .. && make -j "$(nproc)" && make install
-WORKDIR /root/bladeRF/host/build
-RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} ${MARCH}" -DCMAKE_INSTALL_PREFIX=/usr/local -DINSTALL_UDEV_RULES=ON -DENABLE_BACKEND_LIBUSB=TRUE .. && make -j "$(nproc)" && make install
-WORKDIR /root/lime-tools/build
-RUN cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="${CMAKE_CXX_FLAGS} ${MARCH}" .. && make install
-
 FROM anarkiwi/gnuradio-dependencies:${DEPENDENCIES_VERSION}
 COPY --from=driver-builder /usr/local /usr/local
 RUN ldconfig -v
